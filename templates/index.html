@@ -1,14 +1,207 @@
-<!doctype html>
+<!DOCTYPE html>
+<html>
 <head>
-	<title>My First Flask Website</title>
-	<link href="/static/styles.css" rel="stylesheet" type="text/css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet"> 
+  <title>Exciting Quiz Time!</title>
+  <style>
+    h1,h2,h3 {
+    font-family: 'Handlee', cursive;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    legend {
+      font-weight: bold;
+    }
+    
+    .plant {
+      background: #bcf5bc;
+      padding: 12px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .plant img {
+      height: 150px;
+    }
+  </style>
 </head>
 <body>
-	<h1>Hello, World!</h1>
 
-	<p>
-		Welcome to your first Flask website
-	</p>
+  <h1>Native Or Not?!</h1>
+  
+  <form id="quiz-form">
+    
+    <label>
+      Your name:
+      <input id="player" type="text">
+    </label>
 
-    <p>Learn more <a href="/about">about this app</a>.</p>
+    <div class="plant">
+      <h2>Plant #1:</h2>
+      <a title="Eric Hunt, CC BY-SA 2.5 &lt;https://creativecommons.org/licenses/by-sa/2.5&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Zantedeschia_aethiopica_-1.jpg"><img alt="Zantedeschia aethiopica -1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zantedeschia_aethiopica_-1.jpg/256px-Zantedeschia_aethiopica_-1.jpg"></a>    
+      </p>
+      <fieldset>    
+          <legend>Name this plant!</legend>
+          <label><input name="plant1-name" value="periwinkle" type="radio">Periwinkle</label><br>
+          <label><input name="plant1-name" value="peruvian" type="radio">Peruvian Lily</label><br>
+          <label><input name="plant1-name" value="iceplant" type="radio">Iceplant</label><br>
+          <label><input name="plant1-name" value="calla" type="radio" data-yes>Calla Lily</label><br>
+          <label><input name="plant1-name" value="birdofparadise" type="radio">Bird of Paradise</label><br>
+      </fieldset>
+      <fieldset>
+          <legend>Is this plant...</legend>
+          <label><input name="plant1-origin" value="native" type="radio">Native to California</label><br>
+          <label><input name="plant1-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
+          <label><input name="plant1-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
+      </fieldset>
+    </div>
+  
+    <div class="plant">  
+      <h2>Plant #2:</h2>
+      <a title="JJ Harrison (https://www.jjharrison.com.au/), CC BY-SA 3.0 &lt;https://creativecommons.org/licenses/by-sa/3.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Vinca_major_NS.jpg"><img alt="Vinca major NS" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vinca_major_NS.jpg/512px-Vinca_major_NS.jpg"></a>
+      </p>
+      <fieldset>    
+          <legend>Name this plant!</legend>
+          <label><input name="plant2-name" value="dymondia" type="radio">Dymondia</label><br>
+          <label><input name="plant2-name" value="periwinkle" type="radio" data-yes>Periwinkle</label><br>
+          <label><input name="plant2-name" value="violet" type="radio">Violet</label><br>
+          <label><input name="plant2-name" value="ppe" type="radio">Purple People Eater</label><br>
+          <label><input name="plant2-name" value="blueivy" type="radio">Blue Ivy</label><br>
+      </fieldset>
+      <fieldset>
+          <legend>Is this plant...</legend>
+          <label><input name="plant2-origin" value="native" type="radio">Native to California</label><br>
+          <label><input name="plant2-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
+          <label><input name="plant2-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
+      </fieldset>
+    </div>
+  
+    <div class="plant">
+      <h2>Plant #3:</h2>
+      <a title="Alvesgaspar, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Carpobrotus_April_2014-2.jpg"><img alt="Carpobrotus April 2014-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Carpobrotus_April_2014-2.jpg/512px-Carpobrotus_April_2014-2.jpg"></a>
+      </p>
+      <fieldset>    
+          <legend>Name this plant!</legend>
+          <label><input name="plant3-name" value="coyotemint" type="radio">Coyote Mint</label><br>
+          <label><input name="plant3-name" value="heartplant" type="radio">Heartplant</label><br>
+          <label><input name="plant3-name" value="pinkcreeper" type="radio">Pink Creeper</label><br>
+          <label><input name="plant3-name" value="hummingsage" type="radio">Hummingbird Sage</label><br>
+          <label><input name="plant3-name" value="iceplant" type="radio" data-yes>Iceplant</label><br>
+      </fieldset>
+      <fieldset>
+          <legend>Is this plant...</legend>
+          <label><input name="plant3-origin" value="native" type="radio">Native to California</label><br>
+          <label><input name="plant3-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
+          <label><input name="plant3-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
+      </fieldset>
+    </div>
+
+    <div class="plant">
+      <h2>Plant #4:</h2>
+      <a title="Acabashi, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House,_West_Sussex,_England.jpg"><img alt="&#039;Romneya coulteri&#039; Coulter&#039;s Matilija poppy in Walled Garden of Parham House, West Sussex, England" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House%2C_West_Sussex%2C_England.jpg/512px-%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House%2C_West_Sussex%2C_England.jpg"></a>
+      </p>
+      <fieldset>    
+          <legend>Name this plant!</legend>
+          <label><input name="plant4-name" value="woolysunflower" type="radio">Wooly Sunflower</label><br>
+          <label><input name="plant4-name" value="yellowmonkeyflower" type="radio">Yellow Monkeyflower</label><br>
+          <label><input name="plant4-name" value="matilijapoppy" type="radio" data-yes>Matilija Poppy</label><br>
+          <label><input name="plant4-name" value="capedaisy" type="radio">Cape Daisy</label><br>
+          <label><input name="plant4-name" value="ocotillo" type="radio">Ocotillo</label><br>
+      </fieldset>
+      <fieldset>
+          <legend>Is this plant...</legend>
+          <label><input name="plant4-origin" value="native" type="radio" data-yes>Native to California</label><br>
+          <label><input name="plant4-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
+          <label><input name="plant4-origin" value="invasive" type="radio">Invasive in California</label><br>
+      </fieldset>
+    </div>
+
+    <br>
+    <button type="submit" style="font-size:larger;">Submit your score!</button>
+  </form>
+  
+  <div id="results"></div>
+  
+  <h4>High scores</h4>
+  <ol id="scores">
+    Loading...
+  </ol>
+  
+  <script>
+    var quizForm = document.getElementById("quiz-form");
+    quizForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      var resultsDiv = document.getElementById("results");
+        
+      var score = 0;
+      var fields = quizForm.querySelectorAll("fieldset");
+      var scoreEach = 100/fields.length;
+      fields.forEach(function(field) {
+        var selectedInputs = field.querySelectorAll('input:checked');
+        selectedInputs.forEach(function(input) {
+          if (input.hasAttribute("data-yes")) {
+            score += scoreEach;
+          }
+        });
+      });
+      
+      if (score === 100) {
+        resultsDiv.innerHTML = "You got it all right!";
+      } else {
+        resultsDiv.innerHTML = "You got " + score + "%";
+      }
+      var playerName = document.getElementById('player').value || 'Anon';
+
+      insertScore(playerName, score)
+      
+    });
+    
+    function getScores() {
+      var url = '/scores';
+
+      var request = new XMLHttpRequest(); 
+      request.addEventListener('load', function () {
+        var scores = JSON.parse(this.responseText);
+        var scoresDiv = document.getElementById('scores');
+        scoresDiv.innerHTML = '';
+        for (var i = 0; i < scores.length; i++) {
+          scoresDiv.innerHTML += '<li>' + scores[i].player + ': ' + scores[i].score;
+        }
+      });
+      request.open('GET', url, true);
+      request.setRequestHeader('Content-type', 'application/json');
+      request.send();
+    }
+
+    function insertScore(player, score) {
+        var url = '/score';
+
+        fetch(url, {
+            method: 'POST',
+            body: new URLSearchParams({
+                'player': player,
+                'score': score
+            })
+        }).then(function(response) {
+            if (!response.ok) {
+                alert('Error!');
+                console.log(response);
+            } else {
+                getScores();
+            }
+            return response.blob();
+        })
+    }
+
+    getScores();
+
+    
+  </script>
 </body>
+</html>

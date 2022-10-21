@@ -1,25 +1,46 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify, render_template
+from sqlalchemy import create_engine, select, Column, String, Integer
+from sqlalchemy.orm import mapper, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
-# Create a flask app
-app = Flask(
-  __name__,
-  template_folder='templates',
-  static_folder='static'
-)
+# Define the database
+engine = create_engine('sqlite:////tmp/data.db')
+Base = declarative_base(engine)
 
+class PlayerScore(Base):
+    __tablename__ = 'player_scores'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    player = Column(String(255), nullable=False)
+    score = Column(Integer, nullable=False)
+
+# Creates the initial tables
+Base.metadata.create_all(bind=engine)
+Session = sessionmaker(bind=engine)
+# Initialize app
+app = Flask(__name__)
+
+# Set up the routes
 @app.route('/')
-def index():
-  return render_template('index.html')
+def app_index():
+	return render_template('index.html')
 
-@app.route('/hello')
-def hello():
-  return render_template('hello.html', name=request.args.get('name'))
+@app.route('/score', methods=['POST'])
+def app_add():
+    session = Session()
+    score = PlayerScore(player=request.form['player'],
+                        score=request.form.get('score'))
+    session.add(score)
+    session.commit()
+    session.close()
+    return 'ok'
 
-@app.errorhandler(404)
-def handle_404(e):
-    return '<h1>404</h1><p>File not found!</p><img src="https://httpcats.com/404.jpg" alt="cat in box">', 404
+@app.route('/scores', methods=['GET'])
+def app_login():
+    session = Session()
+    result = session.query(PlayerScore).group_by(PlayerScore.player).order_by(PlayerScore.score.desc()).all()
+    session.close()
+    return jsonify([ {"player": r.player, "score": r.score} for r in result])
 
-
+# Run the server
 if __name__ == '__main__':
-  # Run the Flask app
-  app.run(host='0.0.0.0', debug=True, port=8080)
+    app.run(host='0.0.0.0', port=8080)

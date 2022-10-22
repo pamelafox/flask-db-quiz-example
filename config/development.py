@@ -5,6 +5,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
 
-DATABASE_URI = 'sqlite://'
+DATABASE_URI = 'sqlite:////tmp/data.db'
 
 TIME_ZONE = 'UTC'

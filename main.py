@@ -1,15 +1,9 @@
 import os
 
 from flask import Flask, request, jsonify, render_template
+from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
-from models import PlayerScore
-
-import logging
-
-logging.basicConfig()
-logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 app = Flask(__name__, static_folder='static')
 
@@ -24,17 +18,21 @@ else:
 app.config.update(
     SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    SQLALCHEMY_ECHO=True
 )
 
 # Initialize the database connection
 db = SQLAlchemy(app)
 
-# Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
-migrate = Migrate(app, db)
-
-# Create databases (only if database doesn't exist)
-# For schema changes, run "flask db migrate"
+# Create database and tables
 db.init_app(app)
+
+class PlayerScore(db.Model):
+    __tablename__ = 'player_scores'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    player = Column(String(255), nullable=False)
+    score = Column(Integer, nullable=False)
+
 with app.app_context():
     db.create_all()
 

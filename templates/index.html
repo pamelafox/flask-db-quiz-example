@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width">
   <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet"> 
-  <title>Exciting Quiz Time!</title>
+  <title>Python Quiz!</title>
   <style>
     h1,h2,h3 {
     font-family: 'Handlee', cursive;
@@ -19,21 +19,17 @@
       font-weight: bold;
     }
     
-    .plant {
-      background: #bcf5bc;
+    .question {
+      background: #fffaad;
       padding: 12px;
       margin-top: 20px;
       margin-bottom: 20px;
-    }
-    
-    .plant img {
-      height: 150px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Native Or Not?!</h1>
+  <h1>Python Quiz!</h1>
   
   <form id="quiz-form">
     
@@ -42,83 +38,47 @@
       <input id="player" type="text">
     </label>
 
-    <div class="plant">
-      <h2>Plant #1:</h2>
-      <a title="Eric Hunt, CC BY-SA 2.5 &lt;https://creativecommons.org/licenses/by-sa/2.5&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Zantedeschia_aethiopica_-1.jpg"><img alt="Zantedeschia aethiopica -1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zantedeschia_aethiopica_-1.jpg/256px-Zantedeschia_aethiopica_-1.jpg"></a>    
-      </p>
+    <div class="question">
       <fieldset>    
-          <legend>Name this plant!</legend>
-          <label><input name="plant1-name" value="periwinkle" type="radio">Periwinkle</label><br>
-          <label><input name="plant1-name" value="peruvian" type="radio">Peruvian Lily</label><br>
-          <label><input name="plant1-name" value="iceplant" type="radio">Iceplant</label><br>
-          <label><input name="plant1-name" value="calla" type="radio" data-yes>Calla Lily</label><br>
-          <label><input name="plant1-name" value="birdofparadise" type="radio">Bird of Paradise</label><br>
-      </fieldset>
-      <fieldset>
-          <legend>Is this plant...</legend>
-          <label><input name="plant1-origin" value="native" type="radio">Native to California</label><br>
-          <label><input name="plant1-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
-          <label><input name="plant1-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
-      </fieldset>
-    </div>
-  
-    <div class="plant">  
-      <h2>Plant #2:</h2>
-      <a title="JJ Harrison (https://www.jjharrison.com.au/), CC BY-SA 3.0 &lt;https://creativecommons.org/licenses/by-sa/3.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Vinca_major_NS.jpg"><img alt="Vinca major NS" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vinca_major_NS.jpg/512px-Vinca_major_NS.jpg"></a>
-      </p>
-      <fieldset>    
-          <legend>Name this plant!</legend>
-          <label><input name="plant2-name" value="dymondia" type="radio">Dymondia</label><br>
-          <label><input name="plant2-name" value="periwinkle" type="radio" data-yes>Periwinkle</label><br>
-          <label><input name="plant2-name" value="violet" type="radio">Violet</label><br>
-          <label><input name="plant2-name" value="ppe" type="radio">Purple People Eater</label><br>
-          <label><input name="plant2-name" value="blueivy" type="radio">Blue Ivy</label><br>
-      </fieldset>
-      <fieldset>
-          <legend>Is this plant...</legend>
-          <label><input name="plant2-origin" value="native" type="radio">Native to California</label><br>
-          <label><input name="plant2-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
-          <label><input name="plant2-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
-      </fieldset>
-    </div>
-  
-    <div class="plant">
-      <h2>Plant #3:</h2>
-      <a title="Alvesgaspar, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Carpobrotus_April_2014-2.jpg"><img alt="Carpobrotus April 2014-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Carpobrotus_April_2014-2.jpg/512px-Carpobrotus_April_2014-2.jpg"></a>
-      </p>
-      <fieldset>    
-          <legend>Name this plant!</legend>
-          <label><input name="plant3-name" value="coyotemint" type="radio">Coyote Mint</label><br>
-          <label><input name="plant3-name" value="heartplant" type="radio">Heartplant</label><br>
-          <label><input name="plant3-name" value="pinkcreeper" type="radio">Pink Creeper</label><br>
-          <label><input name="plant3-name" value="hummingsage" type="radio">Hummingbird Sage</label><br>
-          <label><input name="plant3-name" value="iceplant" type="radio" data-yes>Iceplant</label><br>
-      </fieldset>
-      <fieldset>
-          <legend>Is this plant...</legend>
-          <label><input name="plant3-origin" value="native" type="radio">Native to California</label><br>
-          <label><input name="plant3-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
-          <label><input name="plant3-origin" value="invasive" type="radio" data-yes>Invasive in California</label><br>
+          <legend>Who invented Python?</legend>
+          <label><input name="question1" value="guido" type="radio" data-yes>Guido van Rossum</label><br>
+          <label><input name="question1" value="ada" type="radio">Ada Lovelace</label><br>
+          <label><input name="question1" value="rob" type="radio">Rob Pike</label><br>
+          <label><input name="question1" value="kathleen" type="radio">Kathleen Booth</label><br>
       </fieldset>
     </div>
 
-    <div class="plant">
-      <h2>Plant #4:</h2>
-      <a title="Acabashi, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House,_West_Sussex,_England.jpg"><img alt="&#039;Romneya coulteri&#039; Coulter&#039;s Matilija poppy in Walled Garden of Parham House, West Sussex, England" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House%2C_West_Sussex%2C_England.jpg/512px-%27Romneya_coulteri%27_Coulter%27s_Matilija_poppy_in_Walled_Garden_of_Parham_House%2C_West_Sussex%2C_England.jpg"></a>
-      </p>
+    <div class="question">
       <fieldset>    
-          <legend>Name this plant!</legend>
-          <label><input name="plant4-name" value="woolysunflower" type="radio">Wooly Sunflower</label><br>
-          <label><input name="plant4-name" value="yellowmonkeyflower" type="radio">Yellow Monkeyflower</label><br>
-          <label><input name="plant4-name" value="matilijapoppy" type="radio" data-yes>Matilija Poppy</label><br>
-          <label><input name="plant4-name" value="capedaisy" type="radio">Cape Daisy</label><br>
-          <label><input name="plant4-name" value="ocotillo" type="radio">Ocotillo</label><br>
+          <legend>What was Python named after?</legend>
+          <label><input name="question2" value="snake" type="radio">Python, the type of snake</label><br>
+          <label><input name="question2" value="monty" type="radio" data-yes>Monty Python, the comedy group</label><br>
+          <label><input name="question2" value="person" type="radio">Python of Aenus, the philosopher</label><br>
+          <label><input name="question2" value="car" type="radio">Ford Python, a race car</label><br>
       </fieldset>
-      <fieldset>
-          <legend>Is this plant...</legend>
-          <label><input name="plant4-origin" value="native" type="radio" data-yes>Native to California</label><br>
-          <label><input name="plant4-origin" value="notnative" type="radio">Not Native to California (but not Invasive)</label><br>
-          <label><input name="plant4-origin" value="invasive" type="radio">Invasive in California</label><br>
+    </div>
+
+    <div class="question">
+      <fieldset>    
+          <legend>When was the first version of Python released?</legend>
+          <label><input name="question3" value="1971" type="radio">1971</label><br>
+          <label><input name="question3" value="1981" type="radio">1981</label><br>
+          <label><input name="question3" value="1991" type="radio" data-yes>1991</label><br>
+          <label><input name="question3" value="2001" type="radio">2001</label><br>
+          <label><input name="question3" value="2011" type="radio">2011</label><br>
+      </fieldset>
+    </div>
+
+    <div class="question">
+      <fieldset>    
+          <legend>What was the latest version of Python released?</legend>
+          <label><input name="question4" value="1971" type="radio">3.6</label><br>
+          <label><input name="question4" value="1981" type="radio">3.7</label><br>
+          <label><input name="question4" value="1991" type="radio">3.8</label><br>
+          <label><input name="question4" value="2001" type="radio">3.9</label><br>
+          <label><input name="question4" value="2011" type="radio" data-yes>3.10</label><br>
+          <label><input name="question4" value="2011" type="radio" data-yes>3.11</label><br>
+          <label><input name="question4" value="2011" type="radio">3.12</label><br>
       </fieldset>
     </div>
 

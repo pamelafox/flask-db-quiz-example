@@ -103,7 +103,7 @@ resource web 'Microsoft.Web/sites@2022-03-01' = {
     name: 'appsettings'
     properties: {
       DBHOST: postgresServer.name
-      DBNAME: djangoDatabase.name
+      DBNAME: flaskDatabase.name
       DBUSER: postgresServer.properties.administratorLogin
       DBPASS: databasePassword
       SCM_DO_BUILD_DURING_DEPLOYMENT: 'true'
@@ -182,7 +182,7 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-pr
   }
   properties: {
     version: '13'
-    administratorLogin: 'django'
+    administratorLogin: 'flaskadmin'
     administratorLoginPassword: databasePassword
     availabilityZone: '1'
     storage: {
@@ -213,18 +213,9 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-pr
 }
 
 
-resource djangoDatabase 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2022-01-20-preview' = {
+resource flaskDatabase 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2022-01-20-preview' = {
   parent: postgresServer
-  name: 'django'
-}
-
-resource postgresServer_AllowAllWindowsAzureIps 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRules@2022-01-20-preview' = {
-  parent: postgresServer
-  name: 'AllowAllWindowsAzureIps'
-  properties: {
-    startIpAddress: '0.0.0.0'
-    endIpAddress: '0.0.0.0'
-  }
+  name: 'flask'
 }
 
 output WEB_URI string = 'https://${web.properties.defaultHostName}'

@@ -51,8 +51,8 @@ def app_add():
 
 @app.route('/scores', methods=['GET'])
 def app_login():
-    result = db.session.execute(db.select(PlayerScore).group_by(PlayerScore.player).order_by(PlayerScore.score.desc())).scalars()
-    return jsonify([ {"player": r.player, "score": r.score} for r in result])
+    result = db.session.execute(db.select(PlayerScore.player, db.func.max(PlayerScore.score).label('max_score')).order_by('max_score')).all()
+    return jsonify([ {"player": r[0], "score": r[1]} for r in result])
 
 # Run the server
 if __name__ == '__main__':

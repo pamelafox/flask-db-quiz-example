@@ -26,7 +26,7 @@ az login
 ```
 4. Provision and deploy all the resources:
 ```
-az deployment sub create --template-file infra/main.bicep -l eastus
+az deployment sub create --template-file infra/main.bicep -l eastus 
 ```
 
 

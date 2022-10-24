@@ -1,6 +1,6 @@
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&repo=pamelafox%2Fsimple-flask-server-example)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&repo=pamelafox%2Fflask-db-quiz-example)
 
-This repository includes a very simple Python Flask web site, made for demonstration purposes only.
+This repository includes a small Python Flask web site, made for demonstration purposes only.
 
 To try it out:
 

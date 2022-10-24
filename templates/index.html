@@ -128,10 +128,12 @@
       var request = new XMLHttpRequest(); 
       request.addEventListener('load', function () {
         var scores = JSON.parse(this.responseText);
-        var scoresDiv = document.getElementById('scores');
-        scoresDiv.innerHTML = '';
+        var scoresList = document.getElementById('scores');
+        scoresList.innerHTML = '';
         for (var i = 0; i < scores.length; i++) {
-          scoresDiv.innerHTML += '<li>' + scores[i].player + ': ' + scores[i].score;
+          const scoreItem = document.createElement('li');
+          scoreItem.innerText = scores[i].player + ': ' + scores[i].score;
+          scoresList.appendChild(scoreItem);
         }
       });
       request.open('GET', url, true);

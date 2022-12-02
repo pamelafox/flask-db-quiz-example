@@ -92,8 +92,8 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-pr
   tags: tags
   name: pgServerName
   sku: {
-    name: 'Standard_D2ds_v4'
-    tier: 'GeneralPurpose'
+    name: 'Standard_B1ms'
+    tier: 'Burstable'
   }
   properties: {
     version: '13'
@@ -101,7 +101,7 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-pr
     administratorLoginPassword: databasePassword
     availabilityZone: '1'
     storage: {
-      storageSizeGB: 128
+      storageSizeGB: 32
     }
     backup: {
       backupRetentionDays: 7

@@ -22,16 +22,79 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
-module resources 'resources.bicep' = {
-  name: 'resources'
+var prefix = '${name}-${resourceToken}'
+
+var postgresServerName = '${prefix}-postgresql'
+var databaseName = 'flask'
+var databaseUser = 'flaskadmin'
+
+module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
+  name: 'postgresql'
   scope: resourceGroup
   params: {
-    name: name
+    name: postgresServerName
     location: location
-    resourceToken: resourceToken
     tags: tags
-    databasePassword: databasePassword
+    sku: {
+      name: 'Standard_B1ms'
+      tier: 'Burstable'
+    }
+    storage: {
+      storageSizeGB: 32
+    }
+    version: '13'
+    administratorLogin: databaseUser
+    administratorLoginPassword: databasePassword
+    databaseName: databaseName
   }
 }
 
+module web 'core/host/appservice.bicep' = {
+  name: 'appservice'
+  scope: resourceGroup
+  params: {
+    name: '${prefix}-appservice'
+    location: location
+    tags: union(tags, { 'azd-service-name': 'web' })
+    appServicePlanId: appServicePlan.outputs.id
+    runtimeName: 'python'
+    runtimeVersion: '3.9'
+    scmDoBuildDuringDeployment: true
+    ftpsState: 'Disabled'
+    appSettings: {
+      DBHOST: postgresServerName
+      DBNAME: databaseName
+      DBUSER: databaseUser
+      DBPASS: databasePassword
+    }
+  }
+}
+
+module appServicePlan 'core/host/appserviceplan.bicep' = {
+  name: 'serviceplan'
+  scope: resourceGroup
+  params: {
+    name: '${prefix}-serviceplan'
+    location: location
+    tags: tags
+    sku: {
+      name: 'B1'
+    }
+    reserved: true
+  }
+}
+
+module logAnalyticsWorkspace 'core/monitor/loganalytics.bicep' = {
+  name: 'loganalytics'
+  scope: resourceGroup
+  params: {
+    name: '${prefix}-loganalytics'
+    location: location
+    tags: tags
+  }
+}
+
+
+
+output WEB_URI string = 'https://${web.outputs.uri}'
 output AZURE_LOCATION string = location

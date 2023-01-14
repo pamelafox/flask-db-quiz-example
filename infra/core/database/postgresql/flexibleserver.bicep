@@ -31,7 +31,6 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-pr
 
   resource database 'databases' = {
     name: databaseName
-    location: location
   }
 
   resource firewall 'firewallRules' = {

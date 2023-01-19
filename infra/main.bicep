@@ -45,7 +45,7 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
     version: '13'
     administratorLogin: databaseUser
     administratorLoginPassword: databasePassword
-    databaseName: databaseName
+    databaseNames: [databaseName]
   }
 }
 

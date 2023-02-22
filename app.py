@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, request, jsonify, render_template
+from flask_migrate import Migrate
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,17 +25,14 @@ app.config.update(
 # Initialize the database connection
 db = SQLAlchemy(app)
 
-# Create database and tables
-db.init_app(app)
+# Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
+migrate = Migrate(app, db)
 
 class PlayerScore(db.Model):
     __tablename__ = 'player_scores'
     id = Column(Integer, primary_key=True, autoincrement=True)
     player = Column(String(255), nullable=False)
     score = Column(Integer, nullable=False)
-
-with app.app_context():
-    db.create_all()
 
 # Set up the routes
 @app.route('/')

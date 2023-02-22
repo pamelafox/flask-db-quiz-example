@@ -46,6 +46,7 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
     administratorLogin: databaseUser
     administratorLoginPassword: databasePassword
     databaseNames: [databaseName]
+    enableFirewall: true
   }
 }
 

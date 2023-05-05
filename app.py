@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from flask_migrate import Migrate
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
@@ -34,12 +34,32 @@ class PlayerScore(db.Model):
     player = Column(String(255), nullable=False)
     score = Column(Integer, nullable=False)
 
+class Quiz(db.Model):
+    __tablename__ = 'quizzes'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(255), nullable=False)
+
+class Question(db.Model):
+    __tablename__ = 'questions'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    question = Column(String(255), nullable=False)
+    answer = Column(String(255), nullable=False)
+    choices = Column(String(255), nullable=False)
+    quiz_id = Column(Integer, nullable=False)
+
 # Set up the routes
 @app.route('/')
-def app_index():
-	return render_template('index.html')
+def index():
+    quizzes = db.select(Quiz).all()
+    return render_template('index.html', quizzes=quizzes)
 
-@app.route('/score', methods=['POST'])
+@app.route('/quiz/<quiz_id>')
+def quiz(quiz_id):
+    quiz = db.select(Quiz).where(Quiz.id == quiz_id).first()
+    questions = db.select(Question).where(Question.quiz_id == quiz_id).all()
+    return render_template('quiz.html', quiz=quiz, questions=questions)
+
+@app.route('/quiz/<quiz_id>/scores', methods=['POST'])
 def app_add():
     score = PlayerScore(player=request.form['player'],
                         score=request.form.get('score'))
@@ -50,8 +70,28 @@ def app_add():
 @app.route('/scores', methods=['GET'])
 def app_login():
     result = db.session.execute(db.select(PlayerScore.player, db.func.max(PlayerScore.score).label('max_score')).group_by(PlayerScore.player).order_by('max_score')).all()
-    return jsonify([ {"player": r[0], "score": r[1]} for r in result])
+    return render_template('_scores.html', player_scores=result)
 
-# Run the server
-if __name__ == '__main__':
-   app.run()
+@app.route('/seed', methods=['GET'])
+def seed():
+    # if there are no quizzes, create a quiz and add questions
+    if len(Quiz.query.all()) > 0:
+        return 'ok'
+    quiz = Quiz(title='Python Quiz!')
+    db.session.add(quiz)
+    db.session.commit()
+    question = Question(question='Who invented Python?', answer='Guido van Rossum', choices='Guido van Rossum,Ada Lovelace,Rob Pike,Kathleen Booth', quiz_id=quiz.id)
+    db.session.add(question)
+    question = Question(question='What is the name of the Python package installer?', answer='pip', choices='pip,py,package,install', quiz_id=quiz.id)
+    db.session.add(question)
+    """
+          <fieldset>    
+          <legend>What was Python named after?</legend>
+          <label><input name="question2" value="snake" type="radio">Python, the type of snake</label><br>
+          <label><input name="question2" value="monty" type="radio" data-yes>Monty Python, the comedy group</label><br>
+          <label><input name="question2" value="person" type="radio">Python of Aenus, the philosopher</label><br>
+          <label><input name="question2" value="car" type="radio">Ford Python, a race car</label><br>
+      </fieldset>
+    """
+    db.session.commit()
+    return 'Quiz seeded!'

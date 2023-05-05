@@ -5,13 +5,19 @@ This repository includes a small Python Flask web site, made for demonstration p
 To try it out:
 
 1. Open this repository in Codespaces
+2. Apply migrations to database:
+
+```console
+python3 -m flask db upgrade
+```
+
 2. Run the server:
 
 ```console
-python3 -m flask --debug run
+python3 -m flask --debug run --port 50505
 ```
 
-2. Click 'http://127.0.0.1:8080' in the terminal, which should open the website in a new tab
+2. Click 'http://127.0.0.1:50505' in the terminal, which should open the website in a new tab
 3. Try the quiz on the index page, see the high scores update on the bottom.
 
 ## Deployment

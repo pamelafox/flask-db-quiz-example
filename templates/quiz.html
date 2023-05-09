@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Quiz: {{ quiz.title }}</h1>
-  
+
 <form id="quiz-form" hx-post="/quizzes/{{ quiz.id}}/scores" hx-target="#score">
-  
+
   <label>
     Your name:
     <input id="player" name="player" type="text">
@@ -13,12 +13,12 @@
   </p>
   {% for question in questions %}
     <div class="question">
-        <fieldset>    
+        <fieldset>
             <legend>{{ question.question }}</legend>
             {% for choice in question.choices %}
             <label><input name="{{ question.form_name }}" value="{{ choice }}" type="radio">{{ choice }}</label><br>
             {% endfor %}
-        </fieldset>  
+        </fieldset>
     </div>
   {% endfor %}
 

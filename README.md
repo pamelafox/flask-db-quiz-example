@@ -11,14 +11,21 @@ To try it out:
 python3 -m flask db upgrade
 ```
 
-2. Run the server:
+3. Load in seed data (to create first quiz):
+
+```console
+python3 -m flask seed
+```
+
+4. Run the server:
 
 ```console
 python3 -m flask --debug run --port 50505
 ```
 
-2. Click 'http://127.0.0.1:50505' in the terminal, which should open the website in a new tab
-3. Try the quiz on the index page, see the high scores update on the bottom.
+5. Click 'http://127.0.0.1:50505' in the terminal, which should open the website in a new tab.
+6. Open the quiz linked from the index page.
+7. Answer the quiz and submit, notice the high scores update below.
 
 ## Deployment
 
@@ -49,5 +56,3 @@ This repository is set up for deployment on Azure using the configuration files 
     ```shell
     azd deploy
     ```
-
-

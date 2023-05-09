@@ -19,6 +19,15 @@
         "panel": "dedicated"
       }
     }, {
+      "label": "Load seed data",
+      "type": "shell",
+      "command": "python3 -m flask seed",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }, {
       "label": "Open Flask shell",
       "type": "shell",
       "command": "python3 -m flask shell",

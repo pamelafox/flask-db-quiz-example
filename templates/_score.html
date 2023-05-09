@@ -1,0 +1,5 @@
+{% if quiz_score.score >= 100 %}
+    <p>🎉 You got it all right! 🎉</p>
+{% else %}
+    <p>You scored {{ quiz_score.score }}% on the quiz.</p>
+{% endif %}

@@ -1,9 +1,9 @@
 import os
 
-from flask import Flask, request, render_template
+import click
+from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-
 
 app = Flask(__name__, static_folder='static')
 
@@ -18,7 +18,7 @@ else:
 app.config.update(
     SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    SQLALCHEMY_ECHO=True
+    SQLALCHEMY_ECHO=False
 )
 
 # Initialize the database connection
@@ -78,42 +78,41 @@ def app_add(quiz_id):
             if request.form.get(question.form_name) == question.answer:
                 num_correct += 1
         percent_correct = (num_correct / len(questions)) * 100
-        score = QuizScore(player=request.form['player'] or 'Anonymous',
+        quiz_score = QuizScore(player=request.form['player'] or 'Anonymous',
                           score=percent_correct,
                            quiz_id=quiz_id
                             )
-        db.session.add(score)
+        db.session.add(quiz_score)
         db.session.commit()
-        return 'ok'
+        return render_template('_score.html', quiz_score=quiz_score), 200, {'HX-Trigger': 'updateScores'}
     else:
+        # Always fetch scores and display them
         result = db.session.execute(
             db.select(QuizScore.player, QuizScore.score, db.func.max(QuizScore.score).label('max_score'))
                 .where(QuizScore.quiz_id == quiz_id)
                 .group_by(QuizScore.player, QuizScore.score).order_by(db.desc('max_score'))).all()
         return render_template('_scores.html', player_scores=result)
 
-@app.route('/seed', methods=['GET'])
-def seed():
-    # if there are no quizzes, create a quiz and add questions
+@app.cli.command("seed")
+def seed_data():
     if len(Quiz.query.all()) > 0:
-        return 'ok'
-    quiz = Quiz(title='Python Quiz!')
+        click.echo('Already seeded!')
+        return
+    # if there are no quizzes, create a quiz and add questions
+    quiz = Quiz(title='Python Quiz')
     db.session.add(quiz)
     db.session.commit()
-    question = Question(question='Who invented Python?', answer='Guido van Rossum',
-                        choices=['Guido van Rossum' , 'Ada Lovelace', 'Rob Pike' , 'Kathleen Booth'], quiz_id=quiz.id)
-    db.session.add(question)
-    question = Question(question='What is the name of the Python package installer?', answer='pip',
-                        choices=['pip', 'py', 'package', 'install'], quiz_id=quiz.id)
-    db.session.add(question)
-    """
-          <fieldset>    
-          <legend>What was Python named after?</legend>
-          <label><input name="question2" value="snake" type="radio">Python, the type of snake</label><br>
-          <label><input name="question2" value="monty" type="radio" data-yes>Monty Python, the comedy group</label><br>
-          <label><input name="question2" value="person" type="radio">Python of Aenus, the philosopher</label><br>
-          <label><input name="question2" value="car" type="radio">Ford Python, a race car</label><br>
-      </fieldset>
-    """
+    questions = [
+        Question(question='Who invented Python?', answer='Guido van Rossum',
+                        choices=['Guido van Rossum' , 'Ada Lovelace', 'Rob Pike' , 'Kathleen Booth'], quiz_id=quiz.id),
+        Question(question='What is the name of the Python package installer?', answer='pip',
+                        choices=['pip', 'py', 'package', 'install'], quiz_id=quiz.id),
+        Question(question='What was Python named after?', answer='Monty Python, the comedy group',
+                        choices=['Python, the type of snake', 'Monty Python, the comedy group',
+                                'Python of Aenus, the philosopher', 'Ford Python, a race car'], quiz_id=quiz.id),
+        Question(question='When was the first version of Python released?', answer='1991',
+                        choices=['1971', '1981', '1991', '2001', '2011'], quiz_id=quiz.id)
+    ]
+    db.session.add_all(questions)
     db.session.commit()
-    return 'Quiz seeded!'
+    click.echo('Quiz seeded!')

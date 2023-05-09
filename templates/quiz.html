@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Quiz: {{ quiz.title }}</h1>
+
+<form id="quiz-form" hx-post="/quizzes/{{ quiz.id}}/scores" hx-target="#score">
+
+  <label>
+    Your name:
+    <input id="player" name="player" type="text">
+  </label>
+
+  <p>Please answer these {{ questions|length }} questions:
+  </p>
+  {% for question in questions %}
+    <div class="question">
+        <fieldset>
+            <legend>{{ question.question }}</legend>
+            {% for choice in question.choices %}
+            <label><input name="{{ question.form_name }}" value="{{ choice }}" type="radio">{{ choice }}</label><br>
+            {% endfor %}
+        </fieldset>
+    </div>
+  {% endfor %}
+
+  <br>
+  <button type="submit" style="font-size:larger;">Submit your score!</button>
+  <div id="score">
+  </div>
+</form>
+
+<div id="results"></div>
+
+<h4>High scores</h4>
+<!--   -->
+<div id="scores" hx-get="/quizzes/{{ quiz.id}}/scores" hx-trigger="every 30s, updateScores from:body">
+  <span class="htmx-indicator">Loading...</span>
+</div>
+
+<script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+{% endblock %}

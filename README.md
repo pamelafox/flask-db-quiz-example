@@ -5,14 +5,27 @@ This repository includes a small Python Flask web site, made for demonstration p
 To try it out:
 
 1. Open this repository in Codespaces
-2. Run the server:
+2. Apply migrations to database:
 
 ```console
-python3 -m flask --debug run
+python3 -m flask db upgrade
 ```
 
-2. Click 'http://127.0.0.1:8080' in the terminal, which should open the website in a new tab
-3. Try the quiz on the index page, see the high scores update on the bottom.
+3. Load in seed data (to create first quiz):
+
+```console
+python3 -m flask seed
+```
+
+4. Run the server:
+
+```console
+python3 -m flask --debug run --port 50505
+```
+
+5. Click 'http://127.0.0.1:50505' in the terminal, which should open the website in a new tab.
+6. Open the quiz linked from the index page.
+7. Answer the quiz and submit, notice the high scores update below.
 
 ## Deployment
 
@@ -43,5 +56,3 @@ This repository is set up for deployment on Azure using the configuration files 
     ```shell
     azd deploy
     ```
-
-

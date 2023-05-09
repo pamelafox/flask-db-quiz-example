@@ -4,6 +4,6 @@ name: flask-db-quiz-example
 
 services:
   web:
-    project: .
+    project: ./src
     language: py
     host: appservice

@@ -46,6 +46,7 @@
 				"ms-python.python",
 				"ms-python.vscode-pylance",
 				"ms-python.black-formatter",
+				"twixes.pypi-assistant",
 				"charliermarsh.ruff",
 				"ms-azuretools.vscode-bicep",
 				"mtxr.sqltools",

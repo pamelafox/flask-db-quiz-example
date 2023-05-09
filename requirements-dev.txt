@@ -1,7 +1,8 @@
--r requirements.txt
+-r src/requirements.txt
 pre-commit
 ruff
 black
 pytest
 coverage
 pytest-cov
+pytest-dotenv

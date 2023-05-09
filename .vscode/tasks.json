@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [ {
+      "label": "Apply migrations",
+      "type": "shell",
+      "command": "python3 -m flask db upgrade",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }, {
+      "label": "Make migrations",
+      "type": "shell",
+      "command": "python3 -m flask db migrate",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }, {
+      "label": "Open Flask shell",
+      "type": "shell",
+      "command": "python3 -m flask shell",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }]
+}

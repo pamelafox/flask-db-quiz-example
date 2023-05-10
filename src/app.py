@@ -9,6 +9,7 @@ app = Flask(__name__, static_folder="static")
 
 # Load configuration for prod vs. dev
 is_prod_env = "WEBSITE_HOSTNAME" in os.environ
+
 if not is_prod_env:
     app.config.from_object("config.development")
 else:
@@ -43,11 +44,7 @@ class Quiz(db.Model):
 
     @staticmethod
     def questions_for_quiz(quiz_id):
-        return (
-            db.session.execute(db.select(Question).where(Question.quiz_id == quiz_id))
-            .scalars()
-            .all()
-        )
+        return db.session.execute(db.select(Question).where(Question.quiz_id == quiz_id)).scalars().all()
 
 
 class Question(db.Model):
@@ -87,9 +84,7 @@ def app_add(quiz_id):
             if request.form.get(question.form_name) == question.answer:
                 num_correct += 1
         percent_correct = (num_correct / len(questions)) * 100
-        quiz_score = QuizScore(
-            player=request.form["player"] or "Anonymous", score=percent_correct, quiz_id=quiz_id
-        )
+        quiz_score = QuizScore(player=request.form["player"] or "Anonymous", score=percent_correct, quiz_id=quiz_id)
         db.session.add(quiz_score)
         db.session.commit()
         return (
@@ -100,9 +95,7 @@ def app_add(quiz_id):
     else:
         # Always fetch scores and display them
         result = db.session.execute(
-            db.select(
-                QuizScore.player, QuizScore.score, db.func.max(QuizScore.score).label("max_score")
-            )
+            db.select(QuizScore.player, QuizScore.score, db.func.max(QuizScore.score).label("max_score"))
             .where(QuizScore.quiz_id == quiz_id)
             .group_by(QuizScore.player, QuizScore.score)
             .order_by(db.desc("max_score"))

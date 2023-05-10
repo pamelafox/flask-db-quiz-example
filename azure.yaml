@@ -1,9 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: flask-db-quiz-example
-
+metadata:
+  template: flask-db-quiz-example@0.0.1-beta
 services:
   web:
-    project: .
+    project: ./src
     language: py
     host: appservice

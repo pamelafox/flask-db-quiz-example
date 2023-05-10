@@ -3,9 +3,9 @@
 	"dockerComposeFile": "docker-compose.yaml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-	"forwardPorts": [50505, 5432],
+	"forwardPorts": [5000, 50505, 5432],
 	"portsAttributes": {
-		"8000": {"label": "Flask port", "onAutoForward": "notify"},
+		"50505": {"label": "Flask port", "onAutoForward": "notify"},
 		"5432": {"label": "PostgreSQL port", "onAutoForward": "silent"}
 	},
 	// Configure tool-specific properties.
@@ -46,6 +46,7 @@
 				"ms-python.python",
 				"ms-python.vscode-pylance",
 				"ms-python.black-formatter",
+				"twixes.pypi-assistant",
 				"charliermarsh.ruff",
 				"ms-azuretools.vscode-bicep",
 				"mtxr.sqltools",
@@ -54,7 +55,7 @@
 		}
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip install -r requirements-dev.txt && pre-commit install",
+	"postCreateCommand": "python3 -m pip install -r requirements-dev.txt && pre-commit install",
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }

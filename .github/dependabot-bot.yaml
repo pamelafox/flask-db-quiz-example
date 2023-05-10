@@ -1,0 +1,8 @@
+safe:
+ - Flask
+ - Flask-Migrate
+ - Flask-SQLAlchemy
+ - psycopg2
+ - python-dotenv
+ - SQLAlchemy
+ - gunicorn

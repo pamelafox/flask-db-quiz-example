@@ -59,10 +59,12 @@ module web 'core/host/appservice.bicep' = {
     tags: union(tags, { 'azd-service-name': 'web' })
     appServicePlanId: appServicePlan.outputs.id
     runtimeName: 'python'
-    runtimeVersion: '3.10'
+    runtimeVersion: '3.11'
     scmDoBuildDuringDeployment: true
     ftpsState: 'Disabled'
     appCommandLine: 'startup.sh'
+    use32BitWorkerProcess: true
+    alwaysOn: false
     appSettings: {
       DBHOST: postgresServerName
       DBNAME: databaseName
@@ -80,7 +82,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'B1'
+      name: 'F1'
     }
     reserved: true
   }

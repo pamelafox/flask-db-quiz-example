@@ -1,5 +1,5 @@
 [tool.ruff]
-line-length = 200
+line-length = 120
 target-version = "py311"
 select = ["E", "F", "I", "UP"]
 ignore = ["D203"]

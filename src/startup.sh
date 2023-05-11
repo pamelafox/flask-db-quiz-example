@@ -1,3 +1,3 @@
-python3 -m flask db upgrade
+python3 -m flask db upgrade --directory flaskapp/migrations
 python3 -m flask seed
-python3 -m gunicorn --chdir=/home/site/wwwroot app:app
+python3 -m gunicorn app:app

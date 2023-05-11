@@ -11,7 +11,7 @@ param location string
 
 @secure()
 @description('PostGreSQL Server administrator password')
-param databasePassword string
+param postgresAdminPassword string
 
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var tags = { 'azd-env-name': name }
@@ -25,8 +25,8 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 var prefix = '${name}-${resourceToken}'
 
 var postgresServerName = '${prefix}-postgresql'
-var databaseName = 'flask'
-var databaseUser = 'flaskadmin'
+var postgresAdminUser = 'admin${uniqueString(resourceGroup.id)}'
+var postgresDatabaseName = 'flask'
 
 module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
   name: 'postgresql'
@@ -43,9 +43,9 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
       storageSizeGB: 32
     }
     version: '13'
-    administratorLogin: databaseUser
-    administratorLoginPassword: databasePassword
-    databaseNames: [databaseName]
+    administratorLogin: postgresAdminUser
+    administratorLoginPassword: postgresAdminPassword
+    databaseNames: [ postgresDatabaseName ]
     allowAzureIPsFirewall: true
   }
 }
@@ -67,9 +67,9 @@ module web 'core/host/appservice.bicep' = {
     alwaysOn: false
     appSettings: {
       DBHOST: postgresServerName
-      DBNAME: databaseName
-      DBUSER: databaseUser
-      DBPASS: databasePassword
+      DBNAME: postgresDatabaseName
+      DBUSER: postgresAdminUser
+      DBPASS: postgresAdminPassword
     }
   }
 }
@@ -97,8 +97,6 @@ module logAnalyticsWorkspace 'core/monitor/loganalytics.bicep' = {
     tags: tags
   }
 }
-
-
 
 output WEB_URI string = 'https://${web.outputs.uri}'
 output AZURE_LOCATION string = location

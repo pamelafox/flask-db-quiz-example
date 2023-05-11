@@ -3,7 +3,7 @@
     "tasks": [ {
       "label": "Apply migrations",
       "type": "shell",
-      "command": "python3 -m flask db upgrade --directory src/migrations",
+      "command": "python3 -m flask db upgrade --directory src/flaskapp/migrations",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -12,7 +12,7 @@
     }, {
       "label": "Make migrations",
       "type": "shell",
-      "command": "python3 -m flask db migrate --directory src/migrations",
+      "command": "python3 -m flask db migrate --directory src/flaskapp/migrations",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

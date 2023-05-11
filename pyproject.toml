@@ -4,6 +4,7 @@ target-version = "py311"
 select = ["E", "F", "I", "UP"]
 ignore = ["D203"]
 show-source = true
+src = ["src"]
 
 [tool.black]
 line-length = 120
@@ -16,3 +17,7 @@ disable = "C0114,C0115,C0116"
 addopts = "-ra --cov=src"
 pythonpath = ["src"]
 env_files = ['.env']
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100

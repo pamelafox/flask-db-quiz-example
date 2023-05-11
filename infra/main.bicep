@@ -45,7 +45,7 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
     version: '13'
     administratorLogin: databaseUser
     administratorLoginPassword: databasePassword
-    databaseNames: [databaseName]
+    databaseNames: [ databaseName ]
     allowAzureIPsFirewall: true
   }
 }
@@ -97,8 +97,6 @@ module logAnalyticsWorkspace 'core/monitor/loganalytics.bicep' = {
     tags: tags
   }
 }
-
-
 
 output WEB_URI string = 'https://${web.outputs.uri}'
 output AZURE_LOCATION string = location

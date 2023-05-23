@@ -31,7 +31,7 @@ If you're not using one of those options for opening the project, then you'll ne
 2. Apply migrations to database:
 
 ```console
-python3 -m flask db upgrade
+python3 -m flask db upgrade --directory src/flaskapp/migrations
 ```
 
 3. Load in seed data (to create first quiz):

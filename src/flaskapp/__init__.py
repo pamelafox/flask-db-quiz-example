@@ -4,10 +4,10 @@ import click
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBaseNoMeta
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 
 
-class BaseModel(DeclarativeBaseNoMeta):
+class BaseModel(MappedAsDataclass, DeclarativeBase):
     pass
 
 

@@ -8,20 +8,20 @@ bp = Blueprint("quizzes", __name__)
 
 class QuizScore(db.Model):
     __tablename__ = "quiz_scores"
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     player: Mapped[str] = mapped_column(db.String(255), nullable=False)
     score: Mapped[int] = mapped_column(db.Integer, nullable=False)
     # 1 to 1 relationship between QuizScore and Quiz
     quiz_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
-    quiz: Mapped["Quiz"] = relationship("Quiz", back_populates="scores")
+    quiz: Mapped["Quiz"] = relationship("Quiz", init=False, back_populates="scores")
 
 
 class Quiz(db.Model):
     __tablename__ = "quizzes"
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    scores: Mapped[list[QuizScore]] = relationship("QuizScore", back_populates="quiz")
-    questions: Mapped[list["Question"]] = relationship("Question", back_populates="quiz")
+    scores: Mapped[list[QuizScore]] = relationship("QuizScore", back_populates="quiz", default_factory=list)
+    questions: Mapped[list["Question"]] = relationship("Question", back_populates="quiz", default_factory=list)
 
     @staticmethod
     def questions_for_quiz(quiz_id) -> list["Question"]:
@@ -73,12 +73,12 @@ class Quiz(db.Model):
 
 class Question(db.Model):
     __tablename__ = "questions"
-    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     question: Mapped[str] = mapped_column(db.String(255), nullable=False)
     answer: Mapped[str] = mapped_column(db.String(255), nullable=False)
     choices: Mapped[list[str]] = mapped_column("data", db.ARRAY(db.String))
     quiz_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
-    quiz: Mapped[Quiz] = relationship("Quiz", back_populates="questions")
+    quiz: Mapped[Quiz] = relationship("Quiz", init=False, back_populates="questions")
 
     @property
     def form_name(self):

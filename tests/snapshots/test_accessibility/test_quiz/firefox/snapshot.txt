@@ -1,0 +1,5 @@
+color-contrast (serious) : 1
+heading-order (moderate) : 1
+html-has-lang (serious) : 1
+landmark-one-main (moderate) : 1
+region (moderate) : 9

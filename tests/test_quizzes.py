@@ -1,17 +1,12 @@
 import pytest
 
+from flaskapp import db
 from flaskapp.quizzes import Quiz, QuizScore
 
 
 @pytest.fixture()
 def client(app):
     return app.test_client()
-
-
-@pytest.fixture()
-def fake_quiz(session):
-    Quiz.seed_data_if_empty()
-    return session.query(Quiz).first()
 
 
 def test_index(client, fake_quiz):
@@ -31,14 +26,14 @@ def test_quiz(client, fake_quiz):
     assert b"Kathleen Booth" in response.data
 
 
-def test_scores_100(client, db, session, fake_quiz):
+def test_scores_100(client, fake_quiz):
     questions = Quiz.questions_for_quiz(fake_quiz.id)
     question_data = {question.form_name: question.answer for question in questions}
     question_data["player"] = "pamela"
     response = client.post(f"/quizzes/{fake_quiz.id}/scores", data=question_data)
     assert response.status_code == 200
     assert b"You got it all right!" in response.data
-    quiz_score = session.execute(db.select(QuizScore).where(QuizScore.player == "pamela")).scalars().first()
+    quiz_score = db.session.execute(db.select(QuizScore).where(QuizScore.player == "pamela")).scalars().first()
     assert quiz_score.score == 100
     assert quiz_score.player == "pamela"
     # Now GET scores
@@ -47,14 +42,14 @@ def test_scores_100(client, db, session, fake_quiz):
     assert b"pamela: 100" in response.data
 
 
-def test_scores_0(client, db, session, fake_quiz):
+def test_scores_0(client, fake_quiz):
     questions = Quiz.questions_for_quiz(fake_quiz.id)
     question_data = {question.form_name: "wrong answer" for question in questions}
     question_data["player"] = "pammyla"
     response = client.post(f"/quizzes/{fake_quiz.id}/scores", data=question_data)
     assert response.status_code == 200
     assert b"You scored 0%" in response.data
-    quiz_score = session.execute(db.select(QuizScore).where(QuizScore.player == "pammyla")).scalars().first()
+    quiz_score = db.session.execute(db.select(QuizScore).where(QuizScore.player == "pammyla")).scalars().first()
     assert quiz_score.score == 0
     assert quiz_score.player == "pammyla"
     # Now GET scores
@@ -63,7 +58,7 @@ def test_scores_0(client, db, session, fake_quiz):
     assert b"pammyla: 0" in response.data
 
 
-def test_scores_50(client, db, session, fake_quiz):
+def test_scores_50(client, fake_quiz):
     questions = Quiz.questions_for_quiz(fake_quiz.id)
     question_data = {question.form_name: question.answer for question in questions}
     question_data[questions[0].form_name] = "wrong answer"
@@ -72,22 +67,10 @@ def test_scores_50(client, db, session, fake_quiz):
     response = client.post(f"/quizzes/{fake_quiz.id}/scores", data=question_data)
     assert response.status_code == 200
     assert b"You scored 50%" in response.data
-    quiz_score = session.execute(db.select(QuizScore).where(QuizScore.player == "susan")).scalars().first()
+    quiz_score = db.session.execute(db.select(QuizScore).where(QuizScore.player == "susan")).scalars().first()
     assert quiz_score.score == 50
     assert quiz_score.player == "susan"
     # Now GET scores
     response = client.get(f"/quizzes/{fake_quiz.id}/scores")
     assert response.status_code == 200
     assert b"susan: 50" in response.data
-
-
-def test_seed_data(session):
-    assert Quiz.seed_data_if_empty() is True
-    assert Quiz.seed_data_if_empty() is False
-
-
-def test_seed_command(session, runner):
-    result = runner.invoke(args="seed")
-    assert "Quiz seeded!" in result.output
-    result = runner.invoke(args="seed")
-    assert "Already seeded!" in result.output

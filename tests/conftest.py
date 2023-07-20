@@ -1,14 +1,14 @@
 import os
 
 import pytest
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 from flaskapp import create_app
 from flaskapp import db as _db
+from flaskapp.quizzes import Quiz
 
 
 @pytest.fixture(scope="session")
-def app(request):
+def app():
     """Session-wide test `Flask` application."""
     dbuser = os.environ["DBUSER"]
     dbpass = os.environ["DBPASS"]
@@ -20,48 +20,37 @@ def app(request):
     }
     _app = create_app(config_override)
 
-    # Establish an application context before running the tests.
-    ctx = _app.app_context()
-    ctx.push()
+    with _app.app_context():
+        engines = _db.engines
+        _db.create_all()
 
-    def teardown():
-        ctx.pop()
+    engine_cleanup = []
+    for key, engine in engines.items():
+        connection = engine.connect()
+        transaction = connection.begin()
+        engines[key] = connection
+        engine_cleanup.append((key, engine, connection, transaction))
 
-    request.addfinalizer(teardown)
-    return _app
+    yield _app
 
-
-@pytest.fixture(scope="session")
-def db(app, request):
-    """Session-wide test database."""
-
-    def teardown():
+    with _app.app_context():
         _db.drop_all()
 
-    _db.app = app
-    _db.create_all()
-
-    request.addfinalizer(teardown)
-    return _db
-
-
-@pytest.fixture(scope="function")
-def session(db, request):
-    """Creates a new database session for a test."""
-    connection = db.engine.connect()
-    transaction = connection.begin()
-
-    db.session = scoped_session(session_factory=sessionmaker(bind=connection))
-
-    def teardown():
+    for key, engine, connection, transaction in engine_cleanup:
         transaction.rollback()
         connection.close()
-        db.session.remove()
-
-    request.addfinalizer(teardown)
-    return db.session
+        engines[key] = engine
 
 
 @pytest.fixture()
 def runner(app):
     return app.test_cli_runner()
+
+
+@pytest.fixture()
+def fake_quiz(app):
+    Quiz.seed_data_if_empty()
+
+    yield _db.session.query(Quiz).first()
+
+    _db.session.query(Quiz).delete()

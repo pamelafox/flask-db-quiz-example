@@ -6,3 +6,8 @@ pytest
 coverage
 pytest-cov
 pytest-dotenv
+playwright
+pytest-playwright
+pytest-flask
+git+https://github.com/pamelafox/axe-core-python.git@add
+git+https://github.com/pamelafox/pytest-snapshot.git@addcallback

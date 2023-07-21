@@ -68,9 +68,12 @@ def axe_pytest_snapshot(snapshot):
     return run_assert
 
 
-def test_index(page: Page, axe_pytest_snapshot):
+def test_index(page: Page, snapshot):
     page.goto(url_for("quizzes.index", _external=True))
-    axe_pytest_snapshot(page)
+    results = Axe().run(page)
+    snapshot.assert_match(
+        results.generate_snapshot(), message_generator=functools.partial(compare_violations, new_results=results)
+    )
 
 
 def test_quiz(page: Page, snapshot, fake_quiz, axe_pytest_snapshot):

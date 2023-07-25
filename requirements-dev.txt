@@ -9,5 +9,4 @@ pytest-dotenv
 playwright
 pytest-playwright
 pytest-flask
-axe-playwright-python
-git+https://github.com/pamelafox/pytest-snapshot.git@addcallback
+pytest-axe-playwright-snapshot

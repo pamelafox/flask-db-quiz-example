@@ -35,6 +35,7 @@ jobs:
           run: |
             python3 -m pip install --upgrade pip
             python3 -m pip install -r requirements-dev.txt
+            playwright install --with-deps
         - name: Lint with ruff
           run: ruff .
         - name: Check formatting with black

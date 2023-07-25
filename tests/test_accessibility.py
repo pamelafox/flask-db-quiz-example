@@ -15,6 +15,7 @@ def test_index(page: Page, axe_pytest_snapshot):
 
 def test_quiz(page: Page, fake_quiz, axe_pytest_snapshot):
     page.goto(url_for("quizzes.quiz", quiz_id=fake_quiz.id, _external=True))
+    expect(page.locator("#scores")).not_to_contain_text("Loading...")
     axe_pytest_snapshot(page)
 
 

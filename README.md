@@ -50,6 +50,21 @@ python3 -m flask --debug run --port 50505
 6. Open the quiz linked from the index page.
 7. Answer the quiz and submit, notice the high scores update below.
 
+## Tests
+
+1. Install the development requirements:
+
+```console
+python3 -m pip install -r requirements-dev.txt
+playwright install --with-deps
+```
+
+2. Run the tests:
+
+```console
+python3 -m pytest
+```
+
 ## Deployment
 
 This repository is set up for deployment on Azure using the configuration files in the `infra` folder.

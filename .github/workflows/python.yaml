@@ -35,12 +35,13 @@ jobs:
           run: |
             python3 -m pip install --upgrade pip
             python3 -m pip install -r requirements-dev.txt
+            playwright install --with-deps
         - name: Lint with ruff
           run: ruff .
         - name: Check formatting with black
           run: black . --check --verbose
         - name: Run Pytest tests
-          run: python3 -m pytest
+          run: python3 -m pytest -s --print-reports
           env:
             DBHOST: localhost
             DBUSER: postgres

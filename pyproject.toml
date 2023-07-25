@@ -14,7 +14,7 @@ target-version = ["py311"]
 disable = "C0114,C0115,C0116"
 
 [tool.pytest.ini_options]
-addopts = "-ra --cov=src"
+addopts = "-ra --cov=src --browser=firefox"
 pythonpath = ["src"]
 env_files = ['.env']
 

@@ -9,4 +9,4 @@ pytest-dotenv
 playwright
 pytest-playwright
 pytest-flask
-pytest-axe-playwright-snapshot==0.0.3
+pytest-axe-playwright-snapshot==0.0.4

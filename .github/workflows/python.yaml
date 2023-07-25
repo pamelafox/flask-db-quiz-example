@@ -41,7 +41,7 @@ jobs:
         - name: Check formatting with black
           run: black . --check --verbose
         - name: Run Pytest tests
-          run: python3 -m pytest
+          run: python3 -m pytest -s
           env:
             DBHOST: localhost
             DBUSER: postgres

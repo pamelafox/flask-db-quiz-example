@@ -8,7 +8,7 @@ def live_app(app, live_server):
     pass
 
 
-def test_index(page: Page, axe_pytest_snapshot):
+def test_index(page: Page, fake_quiz, axe_pytest_snapshot):
     page.goto(url_for("quizzes.index", _external=True))
     axe_pytest_snapshot(page)
 

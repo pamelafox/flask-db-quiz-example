@@ -12,16 +12,20 @@ class QuizScore(db.Model):
     player: Mapped[str] = mapped_column(db.String(255), nullable=False)
     score: Mapped[int] = mapped_column(db.Integer, nullable=False)
     # 1 to 1 relationship between QuizScore and Quiz
-    quiz_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
-    quiz: Mapped["Quiz"] = relationship("Quiz", init=False, back_populates="scores")
+    quiz_id: Mapped[int] = mapped_column(db.ForeignKey("quizzes.id", ondelete="CASCADE"), nullable=False)
+    quiz: Mapped["Quiz"] = relationship(init=False, back_populates="scores")
 
 
 class Quiz(db.Model):
     __tablename__ = "quizzes"
     id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    scores: Mapped[list[QuizScore]] = relationship("QuizScore", back_populates="quiz", default_factory=list)
-    questions: Mapped[list["Question"]] = relationship("Question", back_populates="quiz", default_factory=list)
+    scores: Mapped[list[QuizScore]] = relationship(
+        "QuizScore", back_populates="quiz", default_factory=list, cascade="all, delete-orphan", passive_deletes=True
+    )
+    questions: Mapped[list["Question"]] = relationship(
+        "Question", back_populates="quiz", default_factory=list, cascade="all, delete-orphan", passive_deletes=True
+    )
 
     @staticmethod
     def questions_for_quiz(quiz_id) -> list["Question"]:
@@ -77,8 +81,8 @@ class Question(db.Model):
     question: Mapped[str] = mapped_column(db.String(255), nullable=False)
     answer: Mapped[str] = mapped_column(db.String(255), nullable=False)
     choices: Mapped[list[str]] = mapped_column("data", db.ARRAY(db.String))
-    quiz_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
-    quiz: Mapped[Quiz] = relationship("Quiz", init=False, back_populates="questions")
+    quiz_id: Mapped[int] = mapped_column(db.ForeignKey("quizzes.id"), nullable=False)
+    quiz: Mapped[Quiz] = relationship(init=False, back_populates="questions")
 
     @property
     def form_name(self):

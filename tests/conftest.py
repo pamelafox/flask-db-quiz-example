@@ -4,7 +4,7 @@ import pytest
 
 from flaskapp import create_app
 from flaskapp import db as _db
-from flaskapp.quizzes import Quiz
+from flaskapp.quizzes import Question, Quiz, QuizScore
 
 
 @pytest.fixture(scope="session")
@@ -34,7 +34,9 @@ def app():
     yield _app
 
     with _app.app_context():
-        _db.drop_all()
+        _db.session.query(QuizScore).delete()
+        _db.session.query(Question).delete()
+        _db.session.query(Quiz).delete()
 
     for key, engine, connection, transaction in engine_cleanup:
         transaction.rollback()
@@ -53,4 +55,6 @@ def fake_quiz(app):
 
     yield _db.session.query(Quiz).first()
 
+    _db.session.query(Question).delete()
+    _db.session.query(QuizScore).delete()
     _db.session.query(Quiz).delete()

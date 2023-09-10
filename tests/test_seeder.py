@@ -1,9 +1,11 @@
-from flaskapp.quizzes import Quiz
+from flaskapp.quizzes import Question, Quiz, QuizScore
 
 
 def test_seed_data(app):
     assert Quiz.seed_data_if_empty() is True
     assert Quiz.seed_data_if_empty() is False
+    QuizScore.query.delete()
+    Question.query.delete()
     Quiz.query.delete()
 
 

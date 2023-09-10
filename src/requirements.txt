@@ -1,7 +1,7 @@
 Flask==2.3.2
 Flask-Migrate==4.0.4
-git+https://github.com/pamelafox/flask-sqlalchemy.git@mixin-three
-psycopg2-binary==2.9.6
+git+https://github.com/pallets-eco/flask-sqlalchemy.git@main
+psycopg2-binary==2.9.7
 python-dotenv==1.0.0
-SQLAlchemy==2.0.15
-gunicorn==20.1.0
+SQLAlchemy==2.0.20
+gunicorn==21.2.0

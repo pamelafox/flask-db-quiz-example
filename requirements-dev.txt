@@ -6,3 +6,7 @@ pytest
 coverage
 pytest-cov
 pytest-dotenv
+playwright
+pytest-playwright
+pytest-flask
+pytest-axe-playwright-snapshot==0.0.6

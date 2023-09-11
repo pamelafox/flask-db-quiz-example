@@ -17,7 +17,6 @@ def app():
     config_override = {
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": os.environ.get("TEST_DATABASE_URI", TEST_DATABASE_URI),
-        "SQLALCHEMY_ECHO": True,
     }
     _app = create_app(config_override)
 

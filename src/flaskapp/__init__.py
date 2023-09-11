@@ -4,8 +4,14 @@ import click
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 
-db = SQLAlchemy()
+
+class BaseModel(DeclarativeBase, MappedAsDataclass):
+    pass
+
+
+db = SQLAlchemy(model_class=BaseModel)
 migrate = Migrate()
 
 

@@ -51,6 +51,7 @@ def runner(app):
 def fake_quiz(app):
     Quiz.seed_data_if_empty()
 
-    yield _db.session.query(Quiz).first()
+    yield _db.session.execute(_db.select(Quiz)).scalar()
 
-    _db.session.query(Quiz).delete()
+    _db.session.delete(_db.session.execute(_db.select(Quiz)).scalar())
+    _db.session.commit()

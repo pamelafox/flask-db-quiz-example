@@ -1,4 +1,7 @@
+from typing import List
+
 from flask import Blueprint, render_template, request
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from . import db
 
@@ -7,27 +10,41 @@ bp = Blueprint("quizzes", __name__)
 
 class QuizScore(db.Model):
     __tablename__ = "quiz_scores"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    player = db.Column(db.String(255), nullable=False)
-    score = db.Column(db.Integer, nullable=False)
-    quiz_id = db.Column(db.Integer, nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
+    player: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    score: Mapped[int] = mapped_column(db.Integer, nullable=False)
+    # 1 to 1 relationship between QuizScore and Quiz
+    quiz_id: Mapped[int] = mapped_column(db.ForeignKey("quizzes.id", ondelete="CASCADE"), nullable=False)
+    quiz: Mapped["Quiz"] = relationship(init=False, back_populates="scores")
 
 
 class Quiz(db.Model):
     __tablename__ = "quizzes"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(255), nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
+    title: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    scores: Mapped[List[QuizScore]] = relationship(
+        "QuizScore",
+        back_populates="quiz",
+        default_factory=list,
+        cascade="all, delete",
+    )
+    questions: Mapped[List["Question"]] = relationship(
+        "Question",
+        back_populates="quiz",
+        default_factory=list,
+        cascade="all, delete",
+    )
 
     @staticmethod
-    def questions_for_quiz(quiz_id):
+    def questions_for_quiz(quiz_id) -> List["Question"]:
         return db.session.execute(db.select(Question).where(Question.quiz_id == quiz_id)).scalars().all()
 
     @staticmethod
     def seed_data_if_empty():
-        if len(Quiz.query.all()) > 0:
+        if len(db.session.execute(db.select(Question)).scalars().all()) > 0:
             return False
         # if there are no quizzes, create a quiz and add questions
-        quiz = Quiz(title="Python Quiz")
+        quiz: Quiz = Quiz(title="Python Quiz")
         db.session.add(quiz)
         db.session.commit()
         questions = [
@@ -68,11 +85,12 @@ class Quiz(db.Model):
 
 class Question(db.Model):
     __tablename__ = "questions"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    question = db.Column(db.String(255), nullable=False)
-    answer = db.Column(db.String(255), nullable=False)
-    choices = db.Column("data", db.ARRAY(db.String))
-    quiz_id = db.Column(db.Integer, nullable=False)
+    id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
+    question: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    answer: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    choices: Mapped[List[str]] = mapped_column("data", db.ARRAY(db.String))
+    quiz_id: Mapped[int] = mapped_column(db.ForeignKey("quizzes.id"), nullable=False)
+    quiz: Mapped[Quiz] = relationship(init=False, back_populates="questions")
 
     @property
     def form_name(self):

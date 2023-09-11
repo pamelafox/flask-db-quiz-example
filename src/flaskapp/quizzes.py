@@ -36,7 +36,7 @@ class Quiz(db.Model):
     )
 
     @staticmethod
-    def questions_for_quiz(quiz_id) -> list["Question"]:
+    def questions_for_quiz(quiz_id) -> List["Question"]:
         return db.session.execute(db.select(Question).where(Question.quiz_id == quiz_id)).scalars().all()
 
     @staticmethod
@@ -88,7 +88,7 @@ class Question(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     question: Mapped[str] = mapped_column(db.String(255), nullable=False)
     answer: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    choices: Mapped[list[str]] = mapped_column("data", db.ARRAY(db.String))
+    choices: Mapped[List[str]] = mapped_column("data", db.ARRAY(db.String))
     quiz_id: Mapped[int] = mapped_column(db.ForeignKey("quizzes.id"), nullable=False)
     quiz: Mapped[Quiz] = relationship(init=False, back_populates="questions")
 

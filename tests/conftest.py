@@ -4,7 +4,7 @@ import pytest
 
 from flaskapp import create_app
 from flaskapp import db as _db
-from flaskapp.quizzes import Question, Quiz, QuizScore
+from flaskapp.quizzes import Quiz
 
 
 @pytest.fixture(scope="session")
@@ -17,6 +17,7 @@ def app():
     config_override = {
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": os.environ.get("TEST_DATABASE_URI", TEST_DATABASE_URI),
+        "SQLALCHEMY_ECHO": True,
     }
     _app = create_app(config_override)
 
@@ -34,9 +35,7 @@ def app():
     yield _app
 
     with _app.app_context():
-        _db.session.query(QuizScore).delete()
-        _db.session.query(Question).delete()
-        _db.session.query(Quiz).delete()
+        _db.drop_all()
 
     for key, engine, connection, transaction in engine_cleanup:
         transaction.rollback()
@@ -53,8 +52,7 @@ def runner(app):
 def fake_quiz(app):
     Quiz.seed_data_if_empty()
 
-    yield _db.session.query(Quiz).first()
+    yield _db.session.execute(_db.select(Quiz)).scalar()
 
-    _db.session.query(Question).delete()
-    _db.session.query(QuizScore).delete()
-    _db.session.query(Quiz).delete()
+    _db.session.delete(_db.session.execute(_db.select(Quiz)).scalar())
+    _db.session.commit()

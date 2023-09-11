@@ -1,3 +1,5 @@
+from typing import List
+
 from flask import Blueprint, render_template, request
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,11 +22,17 @@ class Quiz(db.Model):
     __tablename__ = "quizzes"
     id: Mapped[int] = mapped_column(db.Integer, init=False, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    scores: Mapped[list[QuizScore]] = relationship(
-        "QuizScore", back_populates="quiz", default_factory=list, cascade="all, delete-orphan", passive_deletes=True
+    scores: Mapped[List[QuizScore]] = relationship(
+        "QuizScore",
+        back_populates="quiz",
+        default_factory=list,
+        cascade="all, delete",
     )
-    questions: Mapped[list["Question"]] = relationship(
-        "Question", back_populates="quiz", default_factory=list, cascade="all, delete-orphan", passive_deletes=True
+    questions: Mapped[List["Question"]] = relationship(
+        "Question",
+        back_populates="quiz",
+        default_factory=list,
+        cascade="all, delete",
     )
 
     @staticmethod
@@ -33,7 +41,7 @@ class Quiz(db.Model):
 
     @staticmethod
     def seed_data_if_empty():
-        if len(Quiz.query.all()) > 0:
+        if len(db.session.execute(db.select(Question)).scalars().all()) > 0:
             return False
         # if there are no quizzes, create a quiz and add questions
         quiz: Quiz = Quiz(title="Python Quiz")

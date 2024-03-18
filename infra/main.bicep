@@ -45,7 +45,7 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
     version: '13'
     administratorLogin: postgresAdminUser
     administratorLoginPassword: postgresAdminPassword
-    databaseNames: [ postgresDatabaseName ]
+    databaseNames: [postgresDatabaseName]
     allowAzureIPsFirewall: true
   }
 }

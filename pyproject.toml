@@ -1,10 +1,11 @@
 [tool.ruff]
 line-length = 120
 target-version = "py38"
+src = ["src"]
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
 ignore = ["D203"]
-show-source = true
-src = ["src"]
 
 [tool.black]
 line-length = 120

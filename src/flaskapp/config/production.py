@@ -1,5 +1,7 @@
 import os
 
+from azure.identity import DefaultAzureCredential
+
 DEBUG = False
 
 if "WEBSITE_HOSTNAME" in os.environ:
@@ -7,10 +9,12 @@ if "WEBSITE_HOSTNAME" in os.environ:
 else:
     ALLOWED_HOSTS = []
 
-# Configure Postgres database; the full username for PostgreSQL flexible server is
-# username (not @sever-name).
 dbuser = os.environ["DBUSER"]
-dbpass = os.environ["DBPASS"]
+azure_credential = DefaultAzureCredential()
+dbpass = azure_credential.get_token("https://ossrdbms-aad.database.windows.net/.default").token
 dbhost = os.environ["DBHOST"] + ".postgres.database.azure.com"
 dbname = os.environ["DBNAME"]
+
 DATABASE_URI = f"postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}"
+
+# TODO: SSL not needed?

@@ -63,12 +63,12 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
   }
 }
 
-var webAppName = '${prefix}-app-service'
+var webAppName = '${prefix}-appservice'
 module web 'core/host/appservice.bicep' = {
   name: 'appservice'
   scope: resourceGroup
   params: {
-    name: '${prefix}-appservice'
+    name: webAppName
     location: location
     tags: union(tags, { 'azd-service-name': 'web' })
     appServicePlanId: appServicePlan.outputs.id
@@ -96,7 +96,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'F1'
+      name: 'B1'
     }
     reserved: true
   }

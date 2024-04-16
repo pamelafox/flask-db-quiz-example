@@ -110,7 +110,7 @@ resource addAddUser 'Microsoft.DBforPostgreSQL/flexibleServers/administrators@20
     principalName: entraAdministratorName
   }
   // This is a workaround for a bug in the API that requires the parent to be fully resolved
-  dependsOn: [postgresServer]
+  dependsOn: [postgresServer, firewall_all, firewall_azure]
 }
 
 output POSTGRES_DOMAIN_NAME string =  postgresServer.properties.fullyQualifiedDomainName

@@ -35,11 +35,12 @@ def assign_role_for_webapp(postgres_host, postgres_username, app_identity_name):
     else:
         logger.info(f"Creating a PostgreSQL role for identity {app_identity_name}")
         cur.execute(f"SELECT * FROM pgaadauth_create_principal('{app_identity_name}', false, false)")
-        cur.execute(f'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO "{app_identity_name}"')
-        cur.execute(
-            f"ALTER DEFAULT PRIVILEGES IN SCHEMA public"
-            f'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO "{app_identity_name}"'
-        )
+    logger.info(f"Granting permissions to {app_identity_name}")
+    cur.execute(f'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO "{app_identity_name}"')
+    cur.execute(
+        f"ALTER DEFAULT PRIVILEGES IN SCHEMA public "
+        f'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO "{app_identity_name}"'
+    )
     cur.close()
 
 
@@ -52,7 +53,7 @@ if __name__ == "__main__":
     APP_IDENTITY_NAME = os.getenv("WEB_APP_NAME")
     if not POSTGRES_HOST or not POSTGRES_USERNAME or not APP_IDENTITY_NAME:
         logger.error(
-            "Can't find POSTGRES_DOMAIN_NAME, POSTGRES_ADMIN_USERNAME, and WEB_APP_NAME environment variables."
+            "Can't find POSTGRES_DOMAIN_NAME, POSTGRES_ADMIN_USERNAME, and WEB_APP_NAME environment variables. "
             "Make sure you run azd up first."
         )
     else:

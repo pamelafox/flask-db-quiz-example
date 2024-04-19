@@ -9,9 +9,19 @@ param name string
 @description('Primary location for all resources')
 param location string
 
-@secure()
-@description('PostGreSQL Server administrator password')
-param postgresAdminPassword string
+@description('Entra admin role name')
+param postgresEntraAdministratorName string
+
+@description('Entra admin role object ID (in Entra)')
+param postgresEntraAdministratorObjectId string
+
+@description('Entra admin user type')
+@allowed([
+  'User'
+  'Group'
+  'ServicePrincipal'
+])
+param postgresEntraAdministratorType string = 'User'
 
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var tags = { 'azd-env-name': name }
@@ -43,18 +53,22 @@ module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
       storageSizeGB: 32
     }
     version: '13'
-    administratorLogin: postgresAdminUser
-    administratorLoginPassword: postgresAdminPassword
+    authType: 'EntraOnly'
+    entraAdministratorName: postgresEntraAdministratorName
+    entraAdministratorObjectId: postgresEntraAdministratorObjectId
+    entraAdministratorType: postgresEntraAdministratorType
     databaseNames: [postgresDatabaseName]
     allowAzureIPsFirewall: true
+    allowAllIPsFirewall: true // Necessary for post-provision script, can be disabled after
   }
 }
 
+var webAppName = '${prefix}-appservice'
 module web 'core/host/appservice.bicep' = {
   name: 'appservice'
   scope: resourceGroup
   params: {
-    name: '${prefix}-appservice'
+    name: webAppName
     location: location
     tags: union(tags, { 'azd-service-name': 'web' })
     appServicePlanId: appServicePlan.outputs.id
@@ -63,13 +77,13 @@ module web 'core/host/appservice.bicep' = {
     scmDoBuildDuringDeployment: true
     ftpsState: 'Disabled'
     appCommandLine: 'startup.sh'
+    managedIdentity: true
     use32BitWorkerProcess: true
     alwaysOn: false
     appSettings: {
       DBHOST: postgresServerName
       DBNAME: postgresDatabaseName
-      DBUSER: postgresAdminUser
-      DBPASS: postgresAdminPassword
+      DBUSER: webAppName
     }
   }
 }
@@ -82,7 +96,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'F1'
+      name: 'B1'
     }
     reserved: true
   }
@@ -98,5 +112,9 @@ module logAnalyticsWorkspace 'core/monitor/loganalytics.bicep' = {
   }
 }
 
+output WEB_APP_NAME string = webAppName
 output WEB_URI string = 'https://${web.outputs.uri}'
 output AZURE_LOCATION string = location
+
+output POSTGRES_DOMAIN_NAME string = postgresServer.outputs.POSTGRES_DOMAIN_NAME
+output POSTGRES_ADMIN_USERNAME string = postgresEntraAdministratorName

@@ -8,8 +8,14 @@
       "location": {
         "value": "${AZURE_LOCATION}"
       },
-      "postgresAdminPassword": {
-        "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} postgresAdminPassword)"
+      "postgresEntraAdministratorName": {
+        "value": "useradmin"
+      },
+      "postgresEntraAdministratorObjectId": {
+        "value": "${AZURE_PRINCIPAL_ID}"
+      },
+      "postgresEntraAdministratorType": {
+        "value": "User"
       }
     }
   }

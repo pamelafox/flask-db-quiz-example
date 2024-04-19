@@ -113,7 +113,7 @@ module logAnalyticsWorkspace 'core/monitor/loganalytics.bicep' = {
 }
 
 output WEB_APP_NAME string = webAppName
-output WEB_URI string = 'https://${web.outputs.uri}'
+output WEB_URI string = web.outputs.uri
 output AZURE_LOCATION string = location
 
 output POSTGRES_DOMAIN_NAME string = postgresServer.outputs.POSTGRES_DOMAIN_NAME

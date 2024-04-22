@@ -7,8 +7,6 @@ done <<EOF
 $(azd env get-values)
 EOF
 
- #!/bin/sh
-
 echo 'Creating Python virtual environment ".venv"...'
 python3 -m venv .venv
 

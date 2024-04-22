@@ -9,19 +9,11 @@ param name string
 @description('Primary location for all resources')
 param location string
 
-@description('Entra admin role name')
-param postgresEntraAdministratorName string
+@description('Id of the user or app to assign application roles')
+param principalId string
 
-@description('Entra admin role object ID (in Entra)')
-param postgresEntraAdministratorObjectId string
-
-@description('Entra admin user type')
-@allowed([
-  'User'
-  'Group'
-  'ServicePrincipal'
-])
-param postgresEntraAdministratorType string = 'User'
+@description('Whether the deployment is running on GitHub Actions')
+param runningOnGh string = ''
 
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var tags = { 'azd-env-name': name }
@@ -35,8 +27,10 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 var prefix = '${name}-${resourceToken}'
 
 var postgresServerName = '${prefix}-postgresql'
-var postgresAdminUser = 'admin${uniqueString(resourceGroup.id)}'
 var postgresDatabaseName = 'flask'
+var postgresEntraAdministratorObjectId = principalId
+var postgresEntraAdministratorType = empty(runningOnGh) ? 'User' : 'ServicePrincipal'
+var postgresEntraAdministratorName = 'admin${uniqueString(resourceGroup.id, principalId)}'
 
 module postgresServer 'core/database/postgresql/flexibleserver.bicep' = {
   name: 'postgresql'

@@ -8,14 +8,11 @@
       "location": {
         "value": "${AZURE_LOCATION}"
       },
-      "postgresEntraAdministratorName": {
-        "value": "useradmin"
-      },
-      "postgresEntraAdministratorObjectId": {
+      "principalId": {
         "value": "${AZURE_PRINCIPAL_ID}"
       },
-      "postgresEntraAdministratorType": {
-        "value": "User"
+      "runningOnGh": {
+        "value": "${GITHUB_ACTIONS}"
       }
     }
   }

@@ -37,7 +37,7 @@ jobs:
             python3 -m pip install -r requirements-dev.txt
             playwright install --with-deps
         - name: Lint with ruff
-          run: ruff .
+          run: ruff check .
         - name: Check formatting with black
           run: black . --check --verbose
         - name: Run Pytest tests

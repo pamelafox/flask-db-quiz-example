@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-20.04"]
-        python_version: ["3.8", "3.9", "3.10", "3.11"]
+        os: ["ubuntu-latest"]
+        python_version: ["3.9", "3.10", "3.11", "3.12"]
     services:
       postgres:
         image: postgres:11
@@ -37,7 +37,7 @@ jobs:
             python3 -m pip install -r requirements-dev.txt
             playwright install --with-deps
         - name: Lint with ruff
-          run: ruff .
+          run: ruff check .
         - name: Check formatting with black
           run: black . --check --verbose
         - name: Run Pytest tests

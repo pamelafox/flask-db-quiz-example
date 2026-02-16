@@ -5,4 +5,4 @@ psycopg2-binary==2.9.11
 python-dotenv==1.2.1
 SQLAlchemy==2.0.45
 gunicorn==23.0.0
-azure-identity==1.25.1
+azure-identity==1.25.2

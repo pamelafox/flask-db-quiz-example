@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py311"
 src = ["src"]
 
 [tool.ruff.lint]
@@ -9,7 +9,7 @@ ignore = ["D203"]
 
 [tool.black]
 line-length = 120
-target-version = ["py38"]
+target-version = ["py311"]
 
 [tool.pylint.messages_control]
 disable = "C0114,C0115,C0116"
